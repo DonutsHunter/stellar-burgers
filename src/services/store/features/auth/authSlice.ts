@@ -68,7 +68,7 @@ const getUserAsyncThunk = createAsyncThunk<TUserResponse>(
 export const loginAsyncThunk = createAsyncThunk(
   'auth/loginAsyncThunk',
   async function (data: TLoginData, { dispatch }) {
-    dispatch(resetAuth());
+    // dispatch(resetAuth());
     dispatch(resetRequestState());
     return loginUserApi(data);
   }
@@ -84,7 +84,7 @@ export const refreshTokenAsyncThunk = createAsyncThunk(
 export const checkAuthAsyncThunk = createAsyncThunk(
   'auth/checkAuthAsyncThunk',
   async function (_, { dispatch, getState }) {
-    dispatch(resetAuth());
+    // dispatch(resetAuth());
     dispatch(resetRequestState());
 
     const accessToken = getCookie('accessToken');
@@ -104,6 +104,8 @@ export const checkAuthAsyncThunk = createAsyncThunk(
         await dispatch(refreshTokenAsyncThunk());
         await dispatch(getUserAsyncThunk());
       } catch (error) {}
+      dispatch(setAuthChecked());
+    } else {
       dispatch(setAuthChecked());
     }
   }

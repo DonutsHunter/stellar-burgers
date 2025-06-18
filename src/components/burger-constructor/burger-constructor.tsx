@@ -8,6 +8,7 @@ import {
   resetOrderModalData
 } from '../../services/store/features/burger-constructor/burgerConstructorSlice';
 import { checkAuthAsyncThunk } from '../../services/store/features/auth/authSlice';
+import store from '../../services/store/store';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -28,16 +29,19 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = async () => {
     if (!constructorItems.bun || orderRequest) return;
+
     await dispatch(checkAuthAsyncThunk());
 
-    if (!isAuthorized) return navigator('/login');
-
-    dispatch(
-      makeOrderAsyncThunk([
+    const updatedIsAuthorized = store.getState().auth.isAuthorized;
+    if (!updatedIsAuthorized) {
+      navigator('/login');
+    } else {
+      const orderData = [
         String(constructorItems.bun?._id),
         ...constructorItems.ingredients.map((item) => String(item._id))
-      ])
-    );
+      ];
+      dispatch(makeOrderAsyncThunk(orderData));
+    }
   };
   const closeOrderModal = () => {
     dispatch(resetOrderModalData());

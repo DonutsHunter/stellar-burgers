@@ -20,10 +20,12 @@ export function ProtectedRoute({
   const isAuthorized = useSelector((state) => state.auth.isAuthorized);
 
   useEffect(() => {
-    dispatch(getIngredientsAsyncThunk()).finally(() => {
-      dispatch(checkAuthAsyncThunk());
-    });
-  }, []);
+    if (!isAuthChecked) {
+      dispatch(getIngredientsAsyncThunk()).finally(() => {
+        dispatch(checkAuthAsyncThunk());
+      });
+    }
+  }, [isAuthChecked]);
 
   if (!isAuthChecked) {
     return <Preloader />;
