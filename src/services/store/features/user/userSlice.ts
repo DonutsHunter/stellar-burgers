@@ -24,9 +24,7 @@ const initialState: IUserSliceState = {
 
 export const getOrdersAsyncThunk = createAsyncThunk(
   'user/getOrdersAsyncThunk',
-  async function (_, { dispatch }) {
-    return getOrdersApi();
-  }
+  getOrdersApi
 );
 
 const userSlice = createSlice({

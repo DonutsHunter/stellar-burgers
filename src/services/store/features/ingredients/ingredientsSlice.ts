@@ -28,17 +28,9 @@ export const getIngredientAsyncThunk = createAsyncThunk<
   void,
   { id: string },
   { state: RootState }
->(
-  'ingredients/getIngredientAsyncThunk',
-  async function ({ id }, { dispatch, getState }) {
-    const { ingredients } = getState();
-    if (!ingredients.ingredients || ingredients.ingredients.length === 0) {
-      await dispatch(getIngredientsAsyncThunk());
-    }
-
-    dispatch(selectIngredient(id));
-  }
-);
+>('ingredients/getIngredientAsyncThunk', async function ({ id }, { dispatch }) {
+  dispatch(selectIngredient(id));
+});
 
 export const getIngredientsAsyncThunk = createAsyncThunk(
   'ingredients/getIngredientsAsyncThunk',

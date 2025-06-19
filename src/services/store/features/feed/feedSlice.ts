@@ -35,17 +35,9 @@ export const getOrderByIDAsyncThunk = createAsyncThunk<
   TOrderResponse,
   number,
   { state: RootState }
->(
-  'feed/getOrderByIDAsyncThunk',
-  async function (id: number, { getState, dispatch }) {
-    const ingredients = getState().ingredients.ingredients;
-    if (!ingredients || ingredients.length === 0) {
-      await dispatch(getIngredientsAsyncThunk());
-    }
-
-    return getOrderByNumberApi(id);
-  }
-);
+>('feed/getOrderByIDAsyncThunk', async function (id: number) {
+  return getOrderByNumberApi(id);
+});
 
 const feedSlice = createSlice({
   name: 'feed',

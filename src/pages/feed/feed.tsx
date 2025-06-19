@@ -5,7 +5,7 @@ import { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from '../../services/store/store';
 
 import { getFeedsAsyncThunk } from '../../services/store/features/feed/feedSlice';
-import { getIngredientsAsyncThunk } from '../../services/store/features/ingredients/ingredientsSlice';
+// import { getIngredientsAsyncThunk } from '../../services/store/features/ingredients/ingredientsSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
@@ -17,10 +17,6 @@ export const Feed: FC = () => {
   useEffect(() => {
     dispatch(getFeedsAsyncThunk());
   }, [ingredients]);
-
-  useEffect(() => {
-    dispatch(getIngredientsAsyncThunk());
-  }, []);
 
   if (!orders.length) {
     return <Preloader />;

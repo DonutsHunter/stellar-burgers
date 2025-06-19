@@ -14,10 +14,6 @@ export const ConstructorPage: FC = () => {
     (state) => state.ingredients.isIngredientsLoading
   );
 
-  useEffect(() => {
-    dispatch(getIngredientsAsyncThunk());
-  }, []);
-
   return (
     <>
       {isIngredientsLoading ? (

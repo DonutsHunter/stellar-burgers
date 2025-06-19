@@ -3,7 +3,10 @@ import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useDispatch, useSelector } from '../../services/store/store';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getIngredientAsyncThunk } from '../../services/store/features/ingredients/ingredientsSlice';
+import {
+  getIngredientsAsyncThunk,
+  selectIngredient
+} from '../../services/store/features/ingredients/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
   const dispatch = useDispatch();
@@ -13,16 +16,26 @@ export const IngredientDetails: FC = () => {
   const ingredientData = useSelector(
     (state) => state.ingredients.selectedIngredient
   );
+  const isIngredientsLoading = useSelector(
+    (state) => state.ingredients.isIngredientsLoading
+  );
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
 
   useEffect(() => {
-    if (id) {
-      dispatch(getIngredientAsyncThunk({ id }));
-    } else {
+    if (!id) {
       navigate('/');
+      return;
     }
-  }, []);
+    if (!ingredients.length) {
+      dispatch(getIngredientsAsyncThunk()).then(() => {
+        dispatch(selectIngredient(id));
+      });
+    } else {
+      dispatch(selectIngredient(id));
+    }
+  }, [id, dispatch, ingredients.length, navigate]);
 
-  if (!ingredientData) {
+  if (isIngredientsLoading || !ingredientData) {
     return <Preloader />;
   }
 
