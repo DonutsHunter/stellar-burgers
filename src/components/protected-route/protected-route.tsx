@@ -21,9 +21,7 @@ export function ProtectedRoute({
 
   useEffect(() => {
     if (!isAuthChecked) {
-      dispatch(getIngredientsAsyncThunk()).finally(() => {
-        dispatch(checkAuthAsyncThunk());
-      });
+      dispatch(checkAuthAsyncThunk());
     }
   }, [isAuthChecked]);
 
