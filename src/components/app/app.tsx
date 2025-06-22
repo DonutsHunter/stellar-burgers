@@ -41,8 +41,10 @@ function App() {
   }, [dispatch]);
 
   function onModalClose() {
-    if (backgroundLocation) {
-      navigate(-1);
+    if (location.pathname.startsWith('/feed/')) {
+      navigate('/feed');
+    } else if (location.pathname.startsWith('/profile/orders/')) {
+      navigate('/profile/orders');
     } else {
       navigate('/');
     }

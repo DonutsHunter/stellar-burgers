@@ -11,7 +11,7 @@ export const ProfileOrdersUI: FC<ProfileOrdersUIProps> = ({ orders }) => (
       <ProfileMenu />
     </div>
     <div className={`mt-10 ${styles.orders}`}>
-      <OrdersList orders={orders} />
+      <OrdersList orders={orders} listType='profile-orders' />
     </div>
   </main>
 );

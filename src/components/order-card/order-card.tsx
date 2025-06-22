@@ -1,5 +1,5 @@
 import { FC, memo, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
@@ -9,9 +9,11 @@ import { useSelector } from '../../services/store/store';
 
 const maxIngredients = 6;
 
-export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
+export const OrderCard: FC<
+  OrderCardProps & { listType: 'feed' | 'profile-orders' }
+> = memo(({ order, listType }) => {
   const location = useLocation();
-
+  const navigate = useNavigate();
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
   const orderInfo = useMemo(() => {
@@ -48,11 +50,16 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
 
   if (!orderInfo) return null;
 
+  const handleClick = () => {
+    const basePath = listType === 'feed' ? '/feed' : '/profile/orders';
+    navigate(`${basePath}/${orderInfo.number}`, {
+      state: { background: location }
+    });
+  };
+
   return (
-    <OrderCardUI
-      orderInfo={orderInfo}
-      maxIngredients={maxIngredients}
-      locationState={{ background: location }}
-    />
+    <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+      <OrderCardUI orderInfo={orderInfo} maxIngredients={maxIngredients} />
+    </div>
   );
 });
