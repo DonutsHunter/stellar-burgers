@@ -3,12 +3,12 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store/store';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { getOrderByIDAsyncThunk } from '../../services/store/features/feed/feedSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
-
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const orderData = useSelector(
@@ -18,20 +18,16 @@ export const OrderInfo: FC = () => {
 
   useEffect(() => {
     if (!Number(number)) return;
-
     dispatch(getOrderByIDAsyncThunk(Number(number)));
   }, [number]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
-
     const date = new Date(orderData.createdAt);
-
     type TIngredientsWithCount = {
       [key: string]: TIngredient & { count: number };
     };
-
     const ingredientsInfo = orderData.ingredients.reduce(
       (acc: TIngredientsWithCount, item) => {
         if (!acc[item]) {
@@ -45,17 +41,14 @@ export const OrderInfo: FC = () => {
         } else {
           acc[item].count++;
         }
-
         return acc;
       },
       {}
     );
-
     const total = Object.values(ingredientsInfo).reduce(
       (acc, item) => acc + item.price * item.count,
       0
     );
-
     return {
       ...orderData,
       ingredientsInfo,
@@ -68,5 +61,21 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  // Центрируем только если это страница, а не модалка
+  const isModal = !!location.state?.background;
+
+  return isModal ? (
+    <OrderInfoUI orderInfo={orderInfo} />
+  ) : (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '80vh'
+      }}
+    >
+      <OrderInfoUI orderInfo={orderInfo} />
+    </div>
+  );
 };

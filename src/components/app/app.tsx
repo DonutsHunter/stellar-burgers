@@ -52,6 +52,7 @@ function App() {
 
   return (
     <>
+      {/* Основные страницы */}
       <Routes location={backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path='/' element={<ConstructorPage />} />
@@ -105,37 +106,22 @@ function App() {
               </ProtectedRoute>
             }
           />
-        </Route>
-
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title='' onClose={onModalClose}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal title='Детали ингредиента' onClose={onModalClose}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <Modal title='' onClose={onModalClose}>
+          {/* Страницы деталей */}
+          <Route path='/feed/:number' element={<OrderInfo />} />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
                 <OrderInfo />
-              </Modal>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
+      {/* Модальные окна */}
       {backgroundLocation && (
         <Routes>
           <Route
